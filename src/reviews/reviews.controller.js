@@ -4,15 +4,15 @@ const reviewsService = require("./reviews.service");
 
 async function reviewExists(req, res, next) {
   const review = await reviewsService.read(req.params.reviewId);
-  const { review_id, content, score, critic_id, movie_id, surname, preferred_name, organization_name } = review;
-  const detailedReview = { review_id, content, score, critic_id, movie_id, critic: { surname, critic_id, preferred_name, organization_name } };
   if (review) {
+    const { review_id, content, score, critic_id, movie_id, surname, preferred_name, organization_name, created_at, updated_at } = review;
+    const detailedReview = { review_id, content, score, critic_id, movie_id, created_at, updated_at, critic: { surname, critic_id, preferred_name, organization_name } };
     res.locals.review = detailedReview;
     return next();
   }
   next({
     status: 404,
-    message: `Review id ${req.params.reviewId} not found`
+    message: `Review id ${req.params.reviewId} cannot be found`
   });
 }
 
@@ -35,7 +35,7 @@ async function update(req, res, next) {
     review_id: res.locals.review.review_id
   }
   const data = await reviewsService.update(updatedReview);
-  res.json({ data })
+  res.json({ data: { ...res.locals.review, ...updatedReview } })
 }
 
 module.exports = {
