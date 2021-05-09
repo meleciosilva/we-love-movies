@@ -6,6 +6,10 @@ const theatersRouter = require("./../theaters/theaters.router");
 
 router.use("/:movieId/theaters", controller.movieExists, theatersRouter);
 
+router.route("/:movieId/reviews")
+  .get(controller.listReviews)
+  .all(methodNotAllowed);
+
 router.route("/:movieId")
   .get(controller.read)
   .all(methodNotAllowed)
