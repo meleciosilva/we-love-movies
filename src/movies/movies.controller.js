@@ -20,6 +20,7 @@ async function list(req, res, next) {
   try {
     const data = await moviesService.list();
     const { is_showing } = req.query;
+    console.log(is_showing)
     const byResult = is_showing === "true" ? movie => movie.is_showing === true : () => true;
     res.json({ data: data.filter(byResult) });
   } catch(error) {
@@ -28,8 +29,8 @@ async function list(req, res, next) {
 }
 
 function read(req, res, next) {
-  const { movie_id: id, title, runtime_in_minutes, rating, description, image_url } = res.locals.movie;
-  res.json({ data: { id, title, runtime_in_minutes, rating, description, image_url } });
+  const { movie_id, title, runtime_in_minutes, rating, description, image_url } = res.locals.movie;
+  res.json({ data: { movie_id, title, runtime_in_minutes, rating, description, image_url } });
 }
 
 async function listReviews(req, res, next) {
