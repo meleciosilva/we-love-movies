@@ -2,15 +2,17 @@ if (process.env.USER) require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const morgan = require("morgan");
 
 const moviesRouter = require("./movies/movies.router");
 const theatersRouter = require("./theaters/theaters.router");
 const reviewsRouter = require("./reviews/reviews.router");
 
+// Application-level Middleware
+app.use(morgan("dev")); // enables request logger
 app.use(cors()); // enables cors for the entire server/API
 app.use(express.json()); // parses incoming requests with JSON
 
-// Application-level Middleware
 app.use("/movies", moviesRouter);
 app.use("/theaters", theatersRouter);
 app.use("/reviews", reviewsRouter);
