@@ -7,7 +7,7 @@ async function reviewExists(req, res, next) {
   if (review) {
     const { review_id, content, score, critic_id, movie_id, surname, preferred_name, organization_name, created_at, updated_at } = review;
     const detailedReview = { review_id, content, score, critic_id, movie_id, created_at, updated_at, critic: { surname, critic_id, preferred_name, organization_name } };
-    res.locals.review = detailedReview;
+    res.locals.review = detailedReview; 
     return next();
   }
   next({
@@ -16,9 +16,9 @@ async function reviewExists(req, res, next) {
   });
 }
 
-// Route Handlers
+// Router-level Middleware
 
-async function read(req, res, next) {
+function read(req, res, next) {
   res.json({ data: res.locals.review })
 }
 
@@ -30,12 +30,16 @@ function destroy(req, res, next) {
 }
 
 async function update(req, res, next) {
-  const updatedReview = {
-    ...req.body.data,
-    review_id: res.locals.review.review_id
+  try {
+    const updatedReview = {
+      ...req.body.data,
+      review_id: res.locals.review.review_id
+    }
+    const data = await reviewsService.update(updatedReview);
+    res.json({ data: { ...res.locals.review, ...updatedReview } })
+  } catch(error) {
+      next(error);
   }
-  const data = await reviewsService.update(updatedReview);
-  res.json({ data: { ...res.locals.review, ...updatedReview } })
 }
 
 module.exports = {
