@@ -16,7 +16,7 @@ function update(updatedReview) {
   return knex("reviews as r")
     .select("r.*")
     .where({ "r.review_id": updatedReview.review_id })
-    .update(updatedReview, "*");
+    .update(updatedReview);
 }
 
 module.exports = {
