@@ -1,61 +1,36 @@
 const theatersService = require("./theaters.service");
 
-// Validation Middleware
-
-async function movieSpecified(req, res, next) {
-  const data = await theatersService.list();
-  const { movieId } = req.params;
-  if (movieId) {
-    const validTheaters = []; // array to store only theaters playing movie
-    data.filter((theater) => {
-      const {
-        name,
-        address_line_1,
-        address_line_2,
-        city,
-        state,
-        zip,
-        created_at,
-        updated_at,
-      } = theater;
-      // loops through each theaters' movies and checks if specified movie is_showing
-      const validTheater = theater.movies.find(
-        (movie) => movie.movie_id === Number(movieId) && movie.is_showing
-      );
-      const { theater_id, is_showing, movie_id } = validTheater;
-      // if theater is showing movie, then theater is pushed into 'validTheaters' array with additional theater-specific information
-      if (validTheater)
-        return validTheaters.push({
-          theater_id,
-          theater_id,
-          name,
-          address_line_1,
-          address_line_2,
-          city,
-          state,
-          zip,
-          created_at,
-          updated_at,
-          is_showing,
-          movie_id,
-        });
-    });
-    // returns only theaters showing movie specified by movie_id
-    return res.json({ data: validTheaters });
-  }
-  // moves to list() to display all theaters if movie_id not specified
-  next();
-}
-
 // Router-level Middleware
 
-function list(req, res, next) {
-  theatersService
-    .list()
-    .then((data) => res.json({ data }))
-    .catch(next);
+async function list(req, res, next) {
+  try {
+    const data = await theatersService.list();
+    const { movieId } = req.params;
+    if (!movieId) return res.json({ data }); // returns all theaters if movieId is absent
+
+    // filters each theater's movies to determine if movie with movieId is currently showing
+    let validTheaters = data.filter(theater => theater.movies.find(movie => movie.movie_id === Number(movieId) && movie.is_showing ));
+
+    // maps through validTheaters and returns object with theater info and some specific movie info
+    validTheaters = validTheaters.map(theater => {
+      const movie = theater.movies.find(movie => movie.movie_id === Number(movieId) && movie.is_showing ); // finds movie with id matching movieId and is currently showing
+      const { is_showing, movie_id, theater_id } = movie;
+      delete theater.movies; // delete movies key - not required in final return
+
+      return {
+        ...theater,
+        is_showing,
+        movie_id,
+        theater_id
+      } 
+    }) 
+
+    res.json({ data: validTheaters })
+  } catch(error) {
+    next(error);
+  }
 }
 
 module.exports = {
-  list: [movieSpecified, list],
+  list
 };
