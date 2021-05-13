@@ -9,8 +9,8 @@ async function reviewExists(req, res, next) {
       review_id,
       content,
       score,
-      critic_id,
       movie_id,
+      critic_id,
       surname,
       preferred_name,
       organization_name,
@@ -25,7 +25,7 @@ async function reviewExists(req, res, next) {
       movie_id,
       created_at,
       updated_at,
-      critic: { surname, critic_id, preferred_name, organization_name },
+      critic: { surname, preferred_name, organization_name },
     };
     res.locals.review = detailedReview;
     return next();
@@ -52,17 +52,20 @@ function destroy(req, res, next) {
 async function update(req, res, next) {
   try {
     const updatedReview = {
+      ...res.locals.review,
       ...req.body.data,
       review_id: res.locals.review.review_id,
     };
+    delete updatedReview.critic; // delete critic property so review can be updated with service file
     const data = await reviewsService.update(updatedReview);
-    res.json({ data });
+    return res.json({ data: { ...res.locals.review, ...updatedReview, ...data }  }); // insert critic property back in return
   } catch (error) {
     next(error);
   }
 }
 
 module.exports = {
+  read: [reviewExists, read],
   destroy: [reviewExists, destroy],
   update: [reviewExists, update],
 };
