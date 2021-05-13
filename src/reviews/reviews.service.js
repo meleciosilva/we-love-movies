@@ -13,10 +13,11 @@ function destroy(reviewId) {
 }
 
 function update(updatedReview) {
-  return knex("reviews as r")
-    .select("r.*")
-    .where({ "r.review_id": updatedReview.review_id })
-    .update(updatedReview, "*");
+  return knex("reviews")
+    .select("*")
+    .where({ review_id: updatedReview.review_id })
+    .update(updatedReview, "*")
+    .then((updatedRecords) => updatedRecords[0]);
 }
 
 module.exports = {
