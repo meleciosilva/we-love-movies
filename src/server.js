@@ -7,8 +7,18 @@ const listener = () => console.log(`Listening on Port ${PORT}!`);
 
 knex.migrate
   .latest()
-  .then((migrations) => {
-    console.log("migrations", migrations);
+  .then((migrations) => console.log("migrations", migrations))
+  .then(() => knex.seed.run())
+  .then((seeds) => {
+    console.log("seeds", seeds)
     app.listen(PORT, listener);
   })
   .catch(console.error);
+
+// knex.seed
+//   .run()
+//   .then((seeds) => {
+//     console.log("seeds", seeds);
+//     app.listen(PORT, listener);
+//   })
+//   .catch(console.error);
