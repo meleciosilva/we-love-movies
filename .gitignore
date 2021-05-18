@@ -4,4 +4,3 @@ test
 .attachignore
 .qualified-attach.json
 .env
-.vercel
