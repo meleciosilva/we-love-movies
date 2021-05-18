@@ -1,12 +1,12 @@
-if (process.env.USER) require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 // const morgan = require("morgan");
 
-const moviesRouter = require("./src/movies/movies.router");
-const theatersRouter = require("./src/theaters/theaters.router");
-const reviewsRouter = require("./src/reviews/reviews.router");
+const moviesRouter = require("./movies/movies.router");
+const theatersRouter = require("./theaters/theaters.router");
+const reviewsRouter = require("./reviews/reviews.router");
 
 // Application-level Middleware
 // app.use(morgan("dev")); // enables request logger
