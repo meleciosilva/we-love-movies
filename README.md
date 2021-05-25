@@ -7,19 +7,24 @@ We Love Movies is a movie theater platform designed to help users navigate movie
 ## Getting Started
 
 ### Home
+
 ![Image of Home Page](./images/home.png)
 ![Image of Home Page](./images/home-2.png)
 
 ### All Movies
+
 ![All Movies](./images/all-movies.png)
 
 ### All Theaters
+
 ![All Movies](./images/all-theaters.png)
 
 ### Detailed Movie
+
 ![Detailed Movie Listing](./images/detailed-movie.png)
 
 ### Movie Review
+
 ![Movie Review](./images/delete-review.png)
 
 ## Technology
