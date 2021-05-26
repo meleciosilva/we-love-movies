@@ -2,7 +2,7 @@
 
 ## Description
 
-We Love Movies is a movie theater platform designed to help users navigate movies and shopwin theaters.
+We Love Movies is a movie theater platform designed to help users navigate movies and showing theaters.
 
 ## Getting Started
 
