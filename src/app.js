@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -10,7 +9,7 @@ const reviewsRouter = require("./reviews/reviews.router");
 
 // Application-level Middleware
 // app.use(morgan("dev")); // enables request logger
-app.use(cors()); // enables cors for the entire server/API
+app.use(cors({origin: true})); // enables cors for the entire server/API
 app.use(express.json()); // parses incoming requests with JSON
 
 app.use("/movies", moviesRouter);
